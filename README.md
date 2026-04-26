@@ -1,81 +1,50 @@
-# LyricsFusion PRO
+# LyricsFusion PRO: Professional Genius Lyrics Scraper & Manager
 
-A professional, high-performance lyrics scraping and management suite built with Python. 
+[![Python Version](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-**LyricsFusion PRO** provides a modern, intuitive interface for fetching, storing, and organizing song lyrics from Genius.com. Built with **CustomTkinter** for a sleek aesthetic and **Selenium** for robust web automation.
+**LyricsFusion PRO** is a high-performance **Genius lyrics downloader** and management suite. It combines the power of **Selenium web scraping** with a modern **CustomTkinter GUI** to provide the ultimate desktop experience for music enthusiasts and researchers.
 
 ## 🚀 Key Features
 
-- **PRO Dashboard**: Modern sidebar navigation with a high-end dark theme.
-- **Intelligent Scraper**: Headless Selenium-based engine for reliable data extraction.
-- **My Library**: Advanced card-based management system for your saved lyrics.
-- **Real-time Filtering**: Instantly search through your collection by artist or song title.
-- **Statistics View**: Track your scraping activity and library size.
-- **Threading Engine**: Asynchronous operations ensure the UI remains buttery smooth.
-- **Cross-Platform**: Designed to work seamlessly on Windows, macOS, and Linux.
+- **Advanced Lyrics Scraper**: Robust Selenium-based engine specifically optimized for Genius.com.
+- **Modern UI/UX**: Professional dark-themed dashboard built with CustomTkinter.
+- **Persistent Library**: Automatically saves scraped lyrics to a local SQLite database (`lyrics.db`).
+- **Smart Matching**: Uses `stringmatch` algorithms to find the correct song even with typos.
+- **Asynchronous Operations**: Fully threaded execution ensures the GUI never freezes during scraping.
+- **Portable**: Can be compiled into a standalone Windows executable.
 
-## 📦 Prerequisites
+## 📦 Search Keywords
+*Genius Scraper, Lyrics Downloader, Python Scraper, CustomTkinter App, Selenium Automation, Music Metadata, Lyrics Archive, Desktop Lyrics App.*
 
+## 🛠️ Quick Start
+
+### Prerequisites
+- **Google Chrome**: The engine uses headless Chrome for scraping.
 - **Python 3.8+**
-- **Google Chrome** (Required for the Selenium engine)
-- **Active Internet Connection**
 
-## 🛠️ Installation
+### Installation
+1. **Clone the Repo**
+   ```bash
+   git clone https://github.com/houndini-geek/lyricsfusion.git
+   cd lyricsfusion
+   ```
+2. **Install Dependencies**
+   ```bash
+   pip install -r requirements.txt
+   ```
+3. **Run the App**
+   ```bash
+   python genius_lyrics_scraper.py
+   ```
 
-### 1. Clone the repository
-```bash
-git clone https://github.com/yourusername/LyricsFusion.git
-cd LyricsFusion
-```
-
-### 2. Install Dependencies
-```bash
-pip install -r requirements.txt
-```
-
-### 3. Setup ChromeDriver (Recommended)
-We recommend installing `webdriver-manager` to handle driver updates automatically:
-```bash
-pip install webdriver-manager
-```
-
-## 🎮 Usage
-
-Launch the application using:
-```bash
-python genius_lyrics_scraper.py
-```
-
-### Workflow:
-1. **Search**: Enter the artist and song title in the "Search Scraper" tab.
-2. **Scrape**: Hit "START SCRAPING" and watch the progress bar.
-3. **Library**: Save your favorite lyrics to your local library.
-4. **Manage**: Use the "My Library" tab to view, copy, or delete saved songs.
-5. **Analyze**: Check the "Statistics" tab to see your collection's growth.
-
-## 📂 Project Architecture
-
-```text
-├── genius_lyrics_scraper.py    # Main PRO UI (CustomTkinter)
-├── genius_scraper.py            # Selenium Scraper Core
-├── genius_scraper_db.py         # SQLite3 Database Controller
-├── requirements.txt             # Project Dependencies
-└── lyrics.db                    # Persistent Local Storage
-```
-
-## ⚙️ Configuration & Customization
-
-The UI supports several appearance modes (Dark, Light, System) which can be toggled from the sidebar. The theme colors can be easily modified in the `Constants` section of `genius_lyrics_scraper.py`.
-
-## 🛡️ Troubleshooting
-
-- **No Lyrics Found**: Ensure the spelling matches Genius.com exactly.
-- **WebDriver Error**: If not using `webdriver-manager`, ensure your `chromedriver.exe` matches your Chrome version and is in the system PATH.
-- **UI Scaling**: If the window looks blurry on Windows, ensure your high-DPI settings are configured for Python.
-
-## ⚖️ Legal & Compliance
-
-This tool is intended for personal and educational use. Please respect Genius.com's Terms of Service and avoid aggressive scraping that could strain their servers.
+## 📂 Project Structure
+- `genius_lyrics_scraper.py`: The main Graphical User Interface.
+- `genius_scraper.py`: Core Selenium scraping logic.
+- `genius_scraper_db.py`: Database management (SQLite).
+- `main_queue.py`: Thread-safe communication for real-time feedback.
 
 ---
-**LyricsFusion PRO** - *Your Personal Lyrics Archive*
+### 🏷️ GitHub Topics (Add these to your repo settings!)
+To make this project even more visible, go to your GitHub repository settings and add these topics:
+`python`, `selenium`, `lyrics-scraper`, `genius-api`, `customtkinter`, `web-scraping`, `desktop-application`, `sqlite`, `music-tools`.
