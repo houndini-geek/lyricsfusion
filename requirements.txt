@@ -1,0 +1,5 @@
+customtkinter==5.2.2
+selenium==4.43.0
+pyperclip==1.11.0
+stringmatch==0.14.8
+darkdetect==0.8.0
