@@ -43,8 +43,3 @@
 - `genius_scraper.py`: Core Selenium scraping logic.
 - `genius_scraper_db.py`: Database management (SQLite).
 - `main_queue.py`: Thread-safe communication for real-time feedback.
-
----
-### 🏷️ GitHub Topics (Add these to your repo settings!)
-To make this project even more visible, go to your GitHub repository settings and add these topics:
-`python`, `selenium`, `lyrics-scraper`, `genius-api`, `customtkinter`, `web-scraping`, `desktop-application`, `sqlite`, `music-tools`.
