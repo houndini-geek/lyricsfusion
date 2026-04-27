@@ -3,19 +3,19 @@ Genius.com lyrics scraper using Selenium.
 Handles web scraping and parsing of lyrics from Genius.
 """
 
-from operator import sub
+from operator import sub #type: ignore
 from typing import Any
 
 
 import time
-from turtle import title
+from turtle import title #type: ignore
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.options import Options
 from selenium.common.exceptions import TimeoutException, NoSuchElementException
-from main_queue import message
+from main_queue import message #type: ignore
 
 
 from stringmatch import Match
@@ -36,7 +36,7 @@ class GeniusScraper:
     
     def _queue_handler(self,msg:str):
        
-        message.put(msg)
+        message.put(msg) #type: ignore
 
 
     def _init_driver(self):
@@ -61,11 +61,11 @@ class GeniusScraper:
 
 
 
-    def _matchTitle(self,str1,str2):
-        return self._match.match(str1,str2,score=80)
+    def _matchTitle(self,str1,str2): #type: ignore
+        return self._match.match(str1,str2,score=80) #type: ignore
     
-    def _matchArtistName(self,str1,str2):
-        return self._match.match(str1,str2,score=80)
+    def _matchArtistName(self,str1,str2):#type: ignore
+        return self._match.match(str1,str2,score=80)#type: ignore
 
 
     def _build_genius_url(self, artist: str, song_title: str) -> str:
@@ -91,12 +91,12 @@ class GeniusScraper:
             #print(f"Open browser: {url}")
             self._queue_handler(msg=f"Open browser: {url}")
 
-            self.driver.maximize_window()
+            self.driver.maximize_window()#type: ignore
             
             #print("Calling driver.get(url)...")
             self._queue_handler(msg="Calling driver.get(url)...")
             try:
-                self.driver.get(url)
+                self.driver.get(url)#type: ignore
             except TimeoutException:
                 #print("driver.get(url) timed out (page load timeout)!")
                 self._queue_handler(msg="driver.get(url) timed out (page load timeout)!")
@@ -108,7 +108,7 @@ class GeniusScraper:
             time.sleep(2) # Give it a moment to render dynamic content
             
             #print(f"Browser opened: {self.driver.title}")
-            self._queue_handler(msg=f"Browser opened: {self.driver.title}")
+            self._queue_handler(msg=f"Browser opened: {self.driver.title}")#type: ignore
 
 
             #print("Waiting for 'Show more song' button...")
@@ -137,7 +137,7 @@ class GeniusScraper:
                 #print("Searching for 'search-result-paginated-section'")
                 self._queue_handler(msg="Searching for 'search-result-paginated-section'")
 
-                search_result = self.driver.find_element(By.TAG_NAME, 'search-result-paginated-section')
+                search_result = self.driver.find_element(By.TAG_NAME, 'search-result-paginated-section')#type: ignore
                 if search_result:
                    # print("'search-result-paginated-section' Found!")
                     self._queue_handler(msg="'search-result-paginated-section' Found!")
@@ -160,11 +160,11 @@ class GeniusScraper:
                                 #print("Checking for MATCH")
                                 self._queue_handler(msg="Checking for MATCH")
 
-                                if self._matchTitle(str1=title,str2=song_title) and self._matchArtistName(str1=subtitle,str2=artist):
+                                if self._matchTitle(str1=title,str2=song_title) and self._matchArtistName(str1=subtitle,str2=artist): #type: ignore
                                     #print(f"match found for : {song_title} : {artist}")
                                     self._queue_handler(msg=f"match found for : {song_title} : {artist}")
 
-                                    card_url = card.find_element(By.TAG_NAME,'a').get_attribute('href')
+                                    card_url = card.find_element(By.TAG_NAME,'a').get_attribute('href')#type: ignore
                                     return card_url
                             except NoSuchElementException:
                                 print("mini_card-title AND mini_card-subtitle not found - page has changed")
@@ -205,7 +205,7 @@ class GeniusScraper:
                 print("Data attribute not found, trying class-based selector...")
                 self._queue_handler(msg="Data attribute not found, trying class-based selector...")
 
-                containers = self.driver.find_elements(By.CSS_SELECTOR, "div[class*='Lyrics__Container']")
+                containers = self.driver.find_elements(By.CSS_SELECTOR, "div[class*='Lyrics__Container']") #type: ignore
 
             if containers:
                 #print(f"Found {len(containers)} lyrics containers.")
@@ -217,12 +217,12 @@ class GeniusScraper:
                 for container in containers:
                     # Get text with line breaks preserved
                     # We can use get_attribute('innerText') or execute script to preserve formatting
-                    text = self.driver.execute_script("return arguments[0].innerText;", container)
+                    text = self.driver.execute_script("return arguments[0].innerText;", container)#type: ignore
                     if text:
-                        lyrics_text.append(text.strip())
+                        lyrics_text.append(text.strip())#type: ignore
                 
                 self._queue_handler(msg='Lyrics extracted')
-                full_lyrics = '\n\n'.join(lyrics_text).strip()
+                full_lyrics = '\n\n'.join(lyrics_text).strip()#type: ignore
                 return full_lyrics if full_lyrics else None
             else:
                 #print("Lyrics containers NOT FOUND")
@@ -232,7 +232,7 @@ class GeniusScraper:
         except Exception as e:
             raise GeniusScraperError(f"Error extracting lyrics: {e}")
 
-    def scrape(self, artist: str, song_title: str) -> dict | None:
+    def scrape(self, artist: str, song_title: str) -> dict | None:#type: ignore
         """
         Scrape lyrics from Genius for a given artist and song.
         
@@ -254,7 +254,7 @@ class GeniusScraper:
             #print(f"Navigating to song page: {song_url}")
             self._queue_handler(msg=f"Navigating to song page: {song_url}")
 
-            self.driver.get(song_url)
+            self.driver.get(song_url) #type: ignore
             
             lyrics = self._extract_lyrics()
             
