@@ -43,3 +43,18 @@
 - `genius_scraper.py`: Core Selenium scraping logic.
 - `genius_scraper_db.py`: Database management (SQLite).
 - `main_queue.py`: Thread-safe communication for real-time feedback.
+
+4. **TODO**
+- [ ] Implement batch scraping for multiple songs.
+- [ ] Add support for other lyric websites.
+- [ ] Enhance error handling and logging.
+- [ ] Create a portable executable for Windows.
+- [ ] Integrate with music libraries (e.g., Spotify, Apple Music) for automatic lyric fetching.
+- [ ] Add user authentication for personalized lyric management.
+- [ ] Implement a search history feature to quickly access previously scraped lyrics.
+- [ ] Develop a feature to export lyrics in various formats (TXT, PDF, etc.).
+
+5. **TODO - Tweaks**
+- [ ] Disable the copy and save buttons until a song is successfully scraped to prevent user confusion.
+- [ ] Add a loading spinner or progress bar during the scraping process for better user feedback.
+- [ ] Implement a retry mechanism for failed scrapes to improve reliability.
