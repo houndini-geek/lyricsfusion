@@ -480,6 +480,10 @@ class LyricsScraperPRO(ctk.CTk):
             return
             
         self._is_scraping = True
+        self.btn_search.configure(state='disabled')
+        self.btn_history.configure(state='disabled')
+        self.btn_stats.configure(state='disabled')
+        self.btn_setting.configure(state='disabled')
         
         # UI Toggle: Switch Scrape for Cancel
         self.scrape_btn.grid_forget()
@@ -514,6 +518,10 @@ class LyricsScraperPRO(ctk.CTk):
                 self.after(0, lambda: self._update_status("Connection interrupted.", ERROR_COLOR))
         finally:
             self.after(0, self._stop_loading)
+            self.btn_search.configure(state='normal')
+            self.btn_history.configure(state='normal')
+            self.btn_stats.configure(state='normal')
+            self.btn_setting.configure(state='normal')
 
     def _cancel_scrape(self):
         """Terminate the scraping process and reset UI."""
