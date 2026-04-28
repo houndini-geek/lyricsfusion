@@ -38,6 +38,30 @@
    python genius_lyrics_scraper.py
    ```
 
+## 📦 Creating a Windows Executable
+
+To compile LyricsFusion PRO into a standalone `.exe` file, use **PyInstaller**.
+
+1. **Install PyInstaller**
+   ```bash
+   pip install pyinstaller
+   ```
+
+2. **Run the Build Command**
+   ```bash
+   pyinstaller --clean --noconsole --onefile --name "LyricsFusion" --icon=lyricsfusion.ico --add-data "lyricsfusion.ico;." --collect-all customtkinter --collect-all stringmatch --collect-all rapidfuzz --collect-all unidecode --collect-all darkdetect --collect-all selenium --hidden-import 6513f5ca311b03114681__mypyc --hidden-import 4c842c94c09923bae9e4__mypyc genius_lyrics_scraper.py
+   ```
+
+### Command Details:
+- `--clean`: Clears PyInstaller cache and removes temporary files before building.
+- `--noconsole`: Hides the terminal window when the application starts.
+- `--onefile`: Bundles the entire app into a single executable.
+- `--name "LyricsFusion"`: Sets the name of the output executable.
+- `--hidden-import`: Manually includes modules that PyInstaller's static analysis might miss (like randomized `mypyc` compiled extensions).
+- `--collect-all`: Ensures all sub-modules and data for the specified libraries are correctly packaged.
+
+The resulting executable will be located in the `dist/` folder.
+
 ## 📂 Project Structure
 - `genius_lyrics_scraper.py`: The main Graphical User Interface.
 - `genius_scraper.py`: Core Selenium scraping logic.
