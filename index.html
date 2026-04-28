@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LyricsFusion PRO | Ultimate Genius Scraper</title>
+    
+    <!-- Primary Meta Tags -->
+    <meta name="title" content="LyricsFusion PRO | Ultimate Genius Scraper">
+    <meta name="description" content="Professional-grade Genius.com lyrics scraper and manager. Download lyrics automatically with Selenium and manage your library with a modern desktop interface.">
+    <meta name="keywords" content="Genius Scraper, Lyrics Downloader, Python Scraper, CustomTkinter, Selenium Automation, Music Metadata, Lyrics Archive, Desktop Lyrics App">
+    <meta name="author" content="Houndini">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://github.com/houndini-geek/lyricsfusion">
+    <meta property="og:title" content="LyricsFusion PRO | Ultimate Genius Scraper">
+    <meta property="og:description" content="High-performance lyrics downloader and management suite built with Selenium and CustomTkinter.">
+    <meta property="og:image" content="https://raw.githubusercontent.com/houndini-geek/lyricsfusion/master/lyricsfusion.ico">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://github.com/houndini-geek/lyricsfusion">
+    <meta property="twitter:title" content="LyricsFusion PRO | Ultimate Genius Scraper">
+    <meta property="twitter:description" content="High-performance lyrics downloader and management suite built with Selenium and CustomTkinter.">
+    <meta property="twitter:image" content="https://raw.githubusercontent.com/houndini-geek/lyricsfusion/master/lyricsfusion.ico">
+
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-app: #09090b;
+            --bg-surface: #18181b;
+            --bg-elevated: #27272a;
+            --accent: #7c3aed;
+            --accent-hover: #6d28d9;
+            --text-primary: #f4f4f5;
+            --text-muted: #a1a1aa;
+            --border: #3f3f46;
+            --success: #10b981;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Inter, system-ui, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-app);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Navbar */
+        nav {
+            padding: 1.5rem 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--accent);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Hero Section */
+        header {
+            padding: 5rem 0;
+            text-align: center;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: rgba(124, 58, 237, 0.1);
+            color: var(--accent);
+            padding: 0.5rem 1rem;
+            border-radius: 99px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            border: 1px solid rgba(124, 58, 237, 0.2);
+            margin-bottom: 1.5rem;
+        }
+
+        h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(to right, #fff, #a1a1aa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-desc {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto 2.5rem auto;
+        }
+
+        .cta-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 4rem;
+        }
+
+        .btn {
+            padding: 0.8rem 2rem;
+            border-radius: 10px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background-color: var(--accent);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--accent-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px -10px var(--accent);
+        }
+
+        .btn-secondary {
+            background-color: var(--bg-surface);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--bg-elevated);
+        }
+
+        /* Screenshot Placeholders */
+        .screenshot-hero {
+            width: 100%;
+            height: 500px;
+            background-color: var(--bg-surface);
+            border: 2px dashed var(--border);
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+        }
+
+        .screenshot-hero i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--bg-elevated);
+        }
+
+        /* Features Section */
+        .features {
+            padding: 8rem 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background-color: var(--bg-surface);
+            padding: 2.5rem;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            transition: border 0.2s;
+        }
+
+        .feature-card:hover {
+            border-color: var(--accent);
+        }
+
+        .feature-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(124, 58, 237, 0.1);
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            font-size: 1.25rem;
+        }
+
+        .feature-card h3 {
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .feature-card p {
+            color: var(--text-muted);
+        }
+
+        /* Feature Screenshot Placeholder */
+        .screenshot-mini {
+            width: 100%;
+            height: 200px;
+            background-color: var(--bg-elevated);
+            border: 1px dashed var(--border);
+            border-radius: 10px;
+            margin-top: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem 0;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            color: var(--text-muted);
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent);
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            .hero-desc { font-size: 1.1rem; }
+            .cta-group { flex-direction: column; }
+            .screenshot-hero { height: 300px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <nav>
+            <a href="#" class="logo">
+                <i class="fas fa-bolt"></i> LyricsFusion PRO
+            </a>
+            <div class="nav-links">
+                <a href="https://github.com/houndini-geek/lyricsfusion" class="btn btn-secondary">
+                    <i class="fab fa-github"></i> GitHub
+                </a>
+            </div>
+        </nav>
+
+        <header>
+            <span class="hero-badge">Now Available for Windows</span>
+            <h1>The Ultimate Genius Scraper</h1>
+            <p class="hero-desc">
+                High-performance lyrics downloader and management suite built with Selenium and CustomTkinter.
+            </p>
+            <div class="cta-group">
+                <!-- Link to your dist/LyricsFusion.exe -->
+                <a href="dist/LyricsFusion.exe" class="btn btn-primary">
+                    <i class="fas fa-download"></i> Download for Windows
+                </a>
+                <a href="#features" class="btn btn-secondary">Learn More</a>
+            </div>
+
+            <!-- MAIN SCREENSHOT PLACEHOLDER -->
+            <div class="screenshot-hero">
+                <i class="fas fa-image"></i>
+                <p>Main Application Dashboard Screenshot</p>
+                <p style="font-size: 0.8rem;">(1200x800 recommended)</p>
+            </div>
+        </header>
+
+        <section id="features" class="features">
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-robot"></i></div>
+                <h3>Selenium Engine</h3>
+                <p>Robust scraping engine optimized for Genius.com. Handles dynamic content and anti-bot measures seamlessly.</p>
+                <div class="screenshot-mini">Scraper Interface Screenshot</div>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-database"></i></div>
+                <h3>Persistent Library</h3>
+                <p>Saves all scraped lyrics to a local SQLite database. Access your entire library offline, anytime.</p>
+                <div class="screenshot-mini">Library View Screenshot</div>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-magnifying-glass"></i></div>
+                <h3>Smart Matching</h3>
+                <p>Advanced fuzzy string matching ensures you find the right song even with typos or incomplete titles.</p>
+                <div class="screenshot-mini">Search Results Screenshot</div>
+            </div>
+        </section>
+
+        <footer>
+            <div class="footer-links">
+                <a href="https://github.com/houndini-geek/lyricsfusion">GitHub Repository</a>
+                <a href="https://opensource.org/licenses/MIT">MIT License</a>
+            </div>
+            <p>&copy; 2026 LyricsFusion PRO. Built for speed and aesthetics.</p>
+        </footer>
+    </div>
+
+</body>
+</html>
