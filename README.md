@@ -45,6 +45,8 @@
 - `main_queue.py`: Thread-safe communication for real-time feedback.
 
 4. **TODO**
+- [ ] Implement a feature to check for existing lyrics in the database before scraping to avoid duplicates.
+- [ ] Add functionality to check for updates and update the apps automatically.
 - [ ] Implement batch scraping for multiple songs.
 - [ ] Add support for other lyric websites.
 - [ ] Enhance error handling and logging.
