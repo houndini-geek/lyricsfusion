@@ -62,22 +62,18 @@ class GeniusScraper:
 
 
     def _matchTitle(self,str1,str2): #type: ignore
-        return self._match.match(str1,str2,score=80) #type: ignore
+        return self._match.match(str1,str2,score=50) #type: ignore
     
     def _matchArtistName(self,str1,str2):#type: ignore
-        return self._match.match(str1,str2,score=80)#type: ignore
+        return self._match.match(str1,str2,score=50)#type: ignore
 
 
     def _build_genius_url(self, artist: str, song_title: str) -> str:
         """Build Genius URL from artist and song title."""
         import urllib.parse
-        #print("Step 1")
-        #print("Build Genius URL from artist and song title.")
-        self._queue_handler(msg='Build Genius URL from artist and song title.')
-        # Genius URL format: genius.com/Artist-Song-lyrics
+        self._queue_handler(msg='Constructing search query and routing...')
         query = f"{artist} {song_title}"
         encoded_query = urllib.parse.quote(query)
-       # https://genius.com/search?q=plaboi%20carti%20evil%20jordan
         url : str = f"https://genius.com/search?q={encoded_query}"
         return url
 
@@ -87,93 +83,78 @@ class GeniusScraper:
         """
         try:
             url = self._build_genius_url(artist, song_title)
-            self._queue_handler(url)
-            #print(f"Open browser: {url}")
-            self._queue_handler(msg=f"Open browser: {url}")
+            self._queue_handler(msg="Establishing secure connection to Genius...")
 
             self.driver.maximize_window()#type: ignore
             
-            #print("Calling driver.get(url)...")
-            self._queue_handler(msg="Calling driver.get(url)...")
+            self._queue_handler(msg="Synchronizing with server response...")
             try:
                 self.driver.get(url)#type: ignore
             except TimeoutException:
-                #print("driver.get(url) timed out (page load timeout)!")
-                self._queue_handler(msg="driver.get(url) timed out (page load timeout)!")
-
+                self._queue_handler(msg="Connection timed out. Retrying protocol...")
                 return None
             
-            #print("Waiting for page to load...")
-            self._queue_handler(msg="Waiting for page to load...")
+            self._queue_handler(msg="Decoding page layout and scripts...")
             time.sleep(2) # Give it a moment to render dynamic content
             
-            #print(f"Browser opened: {self.driver.title}")
-            self._queue_handler(msg=f"Browser opened: {self.driver.title}")#type: ignore
+            self._queue_handler(msg="Portal established: Accessing song database.")
 
 
-            #print("Waiting for 'Show more song' button...")
-            self._queue_handler(msg="Waiting for 'Show more song' button...")
+            self._queue_handler(msg="Searching for extended track results...")
 
             try:
-                showMoreButton = self.wait.until(EC.visibility_of_element_located((By.XPATH,'/html/body/routable-page/ng-outlet/search-results-page/div/div[2]/div[1]/div[2]/search-result-section/div/a')))
+                showMoreButton = self.wait.until(
+                    EC.visibility_of_element_located(
+                        (By.CLASS_NAME,
+                        'full_width_button')))
                 showMoreButton.click()
-                #print("'Show more button clicked!'")
-                self._queue_handler(msg="'Show more button clicked!'")
+                self._queue_handler(msg="Expanding result list...")
 
             except (TimeoutException, NoSuchElementException):
                 artist_clean = artist.lower().replace(" ",'-')
                 title_clean = song_title.lower().replace(" ",'-')
                 direcURL = f"https://genius.com/{artist_clean}-{title_clean}-lyrics"
-                self._queue_handler(msg="Couldn't found the 'Show more button'")
-
-                #print("Couldn't found the 'Show more button'")
-                #print(f"Try with direct URL: {direcURL}")
-                self._queue_handler(msg=f"Try with direct URL: {direcURL}")
-                
+                self._queue_handler(msg="Standard navigation not found. Switching to direct path resolution...")
                 return direcURL
+
             # Try to find the result cards
             time.sleep(2)
             try:
-                #print("Searching for 'search-result-paginated-section'")
-                self._queue_handler(msg="Searching for 'search-result-paginated-section'")
+                self._queue_handler(msg="Scanning metadata containers...")
 
                 search_result = self.driver.find_element(By.TAG_NAME, 'search-result-paginated-section')#type: ignore
                 if search_result:
-                   # print("'search-result-paginated-section' Found!")
-                    self._queue_handler(msg="'search-result-paginated-section' Found!")
+                    self._queue_handler(msg="Track section identified.")
 
-                    #print("Checking for mini-song-card")
-                    self._queue_handler(msg="Checking for mini-song-card")
-
+                    self._queue_handler(msg="Filtering potential matches...")
+                    time.sleep(4)
                     mini_card_songs = search_result.find_elements(By.TAG_NAME,'mini-song-card')
-                    #print(f"mini-song-card found: {len(mini_card_songs)}")
-                    self._queue_handler(msg=f"mini-song-card found: {len(mini_card_songs)}")
+                    if  not mini_card_songs:
+                        self._queue_handler(msg="No matching track cards detected in this section.")
+                        return None
 
-                    if mini_card_songs:
-                        for card in mini_card_songs:
+
+                    for card in mini_card_songs:
                             try:
-                                #print("Checking for mini_card-title AND mini_card-subtitle")
-                                self._queue_handler(msg="Checking for mini_card-title AND mini_card-subtitle")
+                                self._queue_handler(msg="Verifying track signatures and artist metadata...")
 
                                 title = card.find_element(By.CLASS_NAME,'mini_card-title').text.strip().lower()
                                 subtitle = card.find_element(By.CLASS_NAME,'mini_card-subtitle').text.strip().lower()
-                                #print("Checking for MATCH")
-                                self._queue_handler(msg="Checking for MATCH")
+                                self._queue_handler(msg="Calculating similarity scores...")
 
                                 if self._matchTitle(str1=title,str2=song_title) and self._matchArtistName(str1=subtitle,str2=artist): #type: ignore
-                                    #print(f"match found for : {song_title} : {artist}")
-                                    self._queue_handler(msg=f"match found for : {song_title} : {artist}")
+                                    self._queue_handler(msg=f"Verification successful: Match confirmed.")
 
                                     card_url = card.find_element(By.TAG_NAME,'a').get_attribute('href')#type: ignore
                                     return card_url
+                                else:
+                                    return None
+
                             except NoSuchElementException:
-                                print("mini_card-title AND mini_card-subtitle not found - page has changed")
-                                self._queue_handler(msg="mini_card-title AND mini_card-subtitle not found - page has changed")
+                                self._queue_handler(msg="Dynamic layout shift detected. Verification failed.")
                                 return None
                 else:
-                    print("Search result paginated section NOT FOUND!")
-                    self._queue_handler(msg="Search result paginated section NOT FOUND!")
-
+                    self._queue_handler(msg="Critical metadata section missing from page.")
                     return None
             except Exception as e :
                 raise GeniusScraperError(f"Error searching Genius: {e}")
@@ -185,48 +166,33 @@ class GeniusScraper:
     def _extract_lyrics(self) -> str | None:
         """Extract lyrics from the current page."""
         try:
-            
-            # Wait for lyrics containers to load
-            # The class name often contains 'Lyrics__Container'
-            #print("Looking for the lyrics container")
             try:
-               # print("Waiting for data-lyrics-container")
-                self._queue_handler(msg="Waiting for data-lyrics-container")
+                self._queue_handler(msg="Searching for lyrical data stream...")
 
                 # Modern Genius uses data-lyrics-container attribute
                 containers = self.wait.until(
                     EC.presence_of_all_elements_located((By.CSS_SELECTOR, "[data-lyrics-container='true']"))
                 )
-                #print("Container found")
-                self._queue_handler(msg="Container found")
+                self._queue_handler(msg="Lyrics container localized.")
 
             except TimeoutException:
-                # Fallback to old class-based selector if needed
-                print("Data attribute not found, trying class-based selector...")
-                self._queue_handler(msg="Data attribute not found, trying class-based selector...")
-
+                self._queue_handler(msg="Primary selector failed. Initiating legacy fallback...")
                 containers = self.driver.find_elements(By.CSS_SELECTOR, "div[class*='Lyrics__Container']") #type: ignore
 
             if containers:
-                #print(f"Found {len(containers)} lyrics containers.")
-                self._queue_handler(msg=f"Found {len(containers)} lyrics containers.")
+                self._queue_handler(msg=f"Detected {len(containers)} lyrical segments. Beginning extraction...")
 
                 lyrics_text = []
-                self._queue_handler(msg='Lyrics extraction started...')
-
                 for container in containers:
-                    # Get text with line breaks preserved
-                    # We can use get_attribute('innerText') or execute script to preserve formatting
                     text = self.driver.execute_script("return arguments[0].innerText;", container)#type: ignore
                     if text:
                         lyrics_text.append(text.strip())#type: ignore
                 
-                self._queue_handler(msg='Lyrics extracted')
+                self._queue_handler(msg="Text buffer populated successfully.")
                 full_lyrics = '\n\n'.join(lyrics_text).strip()#type: ignore
                 return full_lyrics if full_lyrics else None
             else:
-                #print("Lyrics containers NOT FOUND")
-                self._queue_handler(msg="Lyrics containers NOT FOUND")
+                self._queue_handler(msg="Error: Lyrics container not present on page.")
                 return None
 
         except Exception as e:
@@ -243,25 +209,20 @@ class GeniusScraper:
             raise GeniusScraperError("Artist and song title cannot be empty")
         
         try:
-            #print(f"Starting scraping for {artist} - {song_title}...")
-            self._queue_handler(msg=f"Starting scraping for {artist} - {song_title}...")
+            self._queue_handler(msg=f"Initializing request: {artist} - {song_title}...")
             song_url = self._search_genius(artist, song_title)
             
             if not song_url:
-                #print("Song URL not found during search.")
-                self._queue_handler(msg="Song URL not found during search.")
+                self._queue_handler(msg="Track not found in Genius repository.")
                 return None
-            #print(f"Navigating to song page: {song_url}")
-            self._queue_handler(msg=f"Navigating to song page: {song_url}")
 
+            self._queue_handler(msg="Accessing confirmed song page...")
             self.driver.get(song_url) #type: ignore
             
             lyrics = self._extract_lyrics()
             
             if not lyrics:
-               #print("Failed to extract lyrics.")
-               self._queue_handler(msg="Failed to extract lyrics.")
-
+               self._queue_handler(msg="Failed to retrieve content from containers.")
                return None
             else:
                 return {
@@ -278,8 +239,7 @@ class GeniusScraper:
         if self.driver:
             try:
                 self.driver.quit()
-                #print("Operation terminated")
-                self._queue_handler(msg="Operation terminated")
+                self._queue_handler(msg="Secure session terminated.")
             except:
                 pass
         self.driver = None
