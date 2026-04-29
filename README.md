@@ -18,9 +18,9 @@
 
 | Home View | Library View |
 | :---: | :---: |
-| ![Home](screenshots/homeview.png) | ![Library](screenshots/libraryview.png) |
+| ![Home](public/screenshots/homeview.png) | ![Library](public/screenshots/libraryview.png) |
 | **Insight View** | **Settings View** |
-| ![Insights](screenshots/insightview.png) | ![Settings](screenshots/settingview.png) |
+| ![Insights](public/screenshots/insightview.png) | ![Settings](public/screenshots/settingview.png) |
 
 ## 📦 Search Keywords
 *Genius Scraper, Lyrics Downloader, Python Scraper, CustomTkinter App, Selenium Automation, Music Metadata, Lyrics Archive, Desktop Lyrics App.*
