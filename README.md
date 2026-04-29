@@ -14,6 +14,14 @@
 - **Asynchronous Operations**: Fully threaded execution ensures the GUI never freezes during scraping.
 - **Portable**: Can be compiled into a standalone Windows executable.
 
+## 📸 Screenshots
+
+| Home View | Library View |
+| :---: | :---: |
+| ![Home](screenshots/homeview.png) | ![Library](screenshots/libraryview.png) |
+| **Insight View** | **Settings View** |
+| ![Insights](screenshots/insightview.png) | ![Settings](screenshots/settingview.png) |
+
 ## 📦 Search Keywords
 *Genius Scraper, Lyrics Downloader, Python Scraper, CustomTkinter App, Selenium Automation, Music Metadata, Lyrics Archive, Desktop Lyrics App.*
 

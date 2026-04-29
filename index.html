@@ -104,6 +104,7 @@
             margin-bottom: 1.5rem;
             background: linear-gradient(to right, #fff, #a1a1aa);
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
@@ -170,10 +171,10 @@
             box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
         }
 
-        .screenshot-hero i {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            color: var(--bg-elevated);
+        .screenshot-hero img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
         }
 
         /* Features Section */
@@ -230,6 +231,12 @@
             align-items: center;
             justify-content: center;
             font-size: 0.8rem;
+        }
+
+        .screenshot-mini img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
         }
 
         /* Footer */
@@ -295,9 +302,10 @@
 
             <!-- MAIN SCREENSHOT PLACEHOLDER -->
             <div class="screenshot-hero">
-                <i class="fas fa-image"></i>
+                <img src="/screenshots/hero.png" alt="">
+                <!-- <i class="fas fa-image"></i>
                 <p>Main Application Dashboard Screenshot</p>
-                <p style="font-size: 0.8rem;">(1200x800 recommended)</p>
+                <p style="font-size: 0.8rem;">(1200x800 recommended)</p> -->
             </div>
         </header>
 
@@ -306,21 +314,28 @@
                 <div class="feature-icon"><i class="fas fa-robot"></i></div>
                 <h3>Selenium Engine</h3>
                 <p>Robust scraping engine optimized for Genius.com. Handles dynamic content and anti-bot measures seamlessly.</p>
-                <div class="screenshot-mini">Scraper Interface Screenshot</div>
+                <div class="screenshot-mini">
+                    <img src="/screenshots/srape.png" alt="">
+                </div>
             </div>
 
             <div class="feature-card">
                 <div class="feature-icon"><i class="fas fa-database"></i></div>
                 <h3>Persistent Library</h3>
                 <p>Saves all scraped lyrics to a local SQLite database. Access your entire library offline, anytime.</p>
-                <div class="screenshot-mini">Library View Screenshot</div>
+                <div class="screenshot-mini">
+                    <img src="/screenshots/libraryview.png" alt="">
+
+                </div>
             </div>
 
             <div class="feature-card">
                 <div class="feature-icon"><i class="fas fa-magnifying-glass"></i></div>
                 <h3>Smart Matching</h3>
                 <p>Advanced fuzzy string matching ensures you find the right song even with typos or incomplete titles.</p>
-                <div class="screenshot-mini">Search Results Screenshot</div>
+                <div class="screenshot-mini">
+                    <img src="/screenshots/insightview.png" alt="">
+                </div>
             </div>
         </section>
 
