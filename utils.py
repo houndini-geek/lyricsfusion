@@ -92,13 +92,12 @@ class SettingsManager:
               return False
         
     @staticmethod
-    def check_app_update()
+    def check_app_update():
         try:
-            response = requests.get(seletorsEndpoint)
+            response = requests.get(appVersionEndpoint)
             if response.status_code == 200:
-                selectors = response.json()
-                SettingsManager.save_selectors(selectors)
-                return True
+                response = response.json()
+                return response
         except:
               return False
     

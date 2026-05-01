@@ -25,7 +25,7 @@ TEXT_MUTED = "#a1a1aa"    # Zinc 400
 SUCCESS_COLOR = "#10b981" # Emerald 500
 ERROR_COLOR = "#ef4444"   # Red 500
 BORDER_COLOR = "#3f3f46"  # Zinc 700
-CURRENT_VERSION = "1.0.0"
+CURRENT_VERSION = "0.0.0"
 
 class SidebarButton(ctk.CTkButton):
     def __init__(self, master, text, command, **kwargs):
@@ -113,7 +113,7 @@ class LyricsScraperPRO(ctk.CTk):
         
         # Initialize Settings
         self.settings = SettingsManager.load_settings()
-        self.update_manager = SettingsManager.check_for_updates()
+        self.update_manager = SettingsManager.check_app_update()
         
         # Initialize Core with settings
         db_path = self.settings.get("db_path", "lyrics.db")
@@ -136,6 +136,7 @@ class LyricsScraperPRO(ctk.CTk):
         
         self._build_sidebar()
         self._build_main_container()
+        threading.Thread(target=self._update_handler,daemon=True).start()
         
         self.show_search_view()
 
@@ -148,6 +149,21 @@ class LyricsScraperPRO(ctk.CTk):
         except requests.ConnectionError:
             return False
     
+    def _update_handler(self):
+        new_version = self.update_manager["APP"]["CURRENT_VERSION"]
+        app_url = self.update_manager["APP"]["WEBSITE_URL"]
+        
+        if CURRENT_VERSION == new_version:
+            pass
+        else:
+            response = messagebox.askyesnocancel(title="LyricsFusion",
+                                      message="LyrisFusion updates is available \n download now?")
+            
+            if response:
+                import webbrowser
+                webbrowser.open_new(url=f"{app_url}")
+
+            
 
     def _build_sidebar(self):
         self.sidebar = ctk.CTkFrame(self, width=260, fg_color=BG_APP, corner_radius=0)
