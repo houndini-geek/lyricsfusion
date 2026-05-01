@@ -36,7 +36,7 @@ class GeniusScraper:
         self._match = Match()
         self.selectors = SettingsManager()
         self.load_selectors()
-        self.isConnected  = self.check_network_connection()
+
      
   
         
