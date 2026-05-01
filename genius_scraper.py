@@ -123,11 +123,9 @@ class GeniusScraper:
                 self._queue_handler(msg="Expanding result list...")
 
             except (TimeoutException, NoSuchElementException):
-                artist_clean = artist.lower().replace(" ",'-')
-                title_clean = song_title.lower().replace(" ",'-')
-                direcURL = f"https://genius.com/{artist_clean}-{title_clean}-lyrics"
-                self._queue_handler(msg="Standard navigation not found. Switching to direct path resolution...")
-                return direcURL
+                self._queue_handler(msg="Element not found - page may have changed / Check for updates > settings > check for updates")
+                return None
+
 
             # Try to find the result cards
             time.sleep(2)
@@ -236,7 +234,7 @@ class GeniusScraper:
             song_url = self._search_genius(artist, song_title)
             
             if not song_url:
-                self._queue_handler(msg="Track not found in Genius repository.")
+               # self._queue_handler(msg="Track not found in Genius repository.")
                 return None
 
             self._queue_handler(msg="Accessing confirmed song page...")
@@ -272,8 +270,8 @@ class GeniusScraper:
         self.close()
 
 
-# if __name__ == "__main__":
-#     app = GeniusScraper()
-#     lyrics = app.scrape(artist='playboi carti', song_title='different day')
-#     print(lyrics)
+if __name__ == "__main__":
+    app = GeniusScraper()
+    lyrics = app.scrape(artist='playboi carti', song_title='different day')
+    print(lyrics)
 

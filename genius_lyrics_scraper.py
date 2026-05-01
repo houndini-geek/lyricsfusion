@@ -25,6 +25,7 @@ TEXT_MUTED = "#a1a1aa"    # Zinc 400
 SUCCESS_COLOR = "#10b981" # Emerald 500
 ERROR_COLOR = "#ef4444"   # Red 500
 BORDER_COLOR = "#3f3f46"  # Zinc 700
+CURRENT_VERSION = "1.0.0"
 
 class SidebarButton(ctk.CTkButton):
     def __init__(self, master, text, command, **kwargs):
@@ -112,6 +113,7 @@ class LyricsScraperPRO(ctk.CTk):
         
         # Initialize Settings
         self.settings = SettingsManager.load_settings()
+        self.update_manager = SettingsManager.check_for_updates()
         
         # Initialize Core with settings
         db_path = self.settings.get("db_path", "lyrics.db")
@@ -394,7 +396,8 @@ class LyricsScraperPRO(ctk.CTk):
         btn_container = ctk.CTkFrame(maint_card, fg_color="transparent")
         btn_container.pack(fill="x", padx=25, pady=(0, 25))
         
-        ctk.CTkButton(btn_container, text="Check for Updates", height=40, fg_color=BG_SURFACE, border_width=1, border_color=BORDER_COLOR, command=self._check_updates).pack(side="left", padx=(0, 10))
+        self.update_btn = ctk.CTkButton(btn_container, text="Check for Updates", height=40, fg_color=BG_SURFACE, border_width=1, border_color=BORDER_COLOR, command=lambda: threading.Thread(target=self._check_updates,daemon=True).start())
+        self.update_btn.pack(side="left", padx=(0, 10))
         ctk.CTkButton(btn_container, text="Wipe Library", height=40, fg_color="transparent", border_width=1, border_color=ERROR_COLOR, text_color=ERROR_COLOR, hover_color="#451a1e", command=self._wipe_library).pack(side="left")
 
         # About Section
@@ -428,7 +431,19 @@ class LyricsScraperPRO(ctk.CTk):
         SettingsManager.save_settings(settings)
 
     def _check_updates(self):
-        messagebox.showinfo("Updater", "You are running the latest version of LyricsFusion PRO (v1.2.0).")
+        self.update_btn.configure(text='Updating...')
+        self.update_btn.configure(state='disabled')
+        update_status = SettingsManager.check_for_updates()
+        if update_status:
+            messagebox.showinfo("Updater", "You are running the latest version of LyricsFusion PRO (v1.2.0).")
+        else:
+            messagebox.showinfo("Updater", "Update failed ! check website for other LyricsFusion released version")
+        self.update_btn.configure(text='Check for Updates')
+        self.update_btn.configure(state='normal')
+
+       
+        
+
 
     def _wipe_library(self):
         if messagebox.askyesno("Confirm Wipe", "Are you sure you want to permanently delete ALL saved lyrics?"):

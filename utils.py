@@ -1,11 +1,15 @@
 import json
 import os
 from pathlib import Path
+import requests
 
 # Save settings to User profile directory: C:/Users/<User>/.lyricsfusion/settings.json
 SETTINGS_DIR = Path.home() / ".lyricsfusion"
 SETTINGS_FILE = SETTINGS_DIR / "settings.json"
 SELLECTORS_FILE = SETTINGS_DIR / "selectors.json"
+
+seletorsEndpoint = 'https://raw.githubusercontent.com/houndini-geek/lyricsfusion/refs/heads/master/selectors.json'
+appVersionEndpoint = 'https://raw.githubusercontent.com/houndini-geek/lyricsfusion/refs/heads/master/current_app.json'
 
 DEFAULT_SETTINGS = {
     "db_path": "lyrics.db",
@@ -75,6 +79,29 @@ class SettingsManager:
         """Create the settings directory if it doesn't exist."""
         if not SETTINGS_DIR.exists():
             SETTINGS_DIR.mkdir(parents=True, exist_ok=True)
+
+    @staticmethod
+    def check_for_updates():
+        try:
+            response = requests.get(seletorsEndpoint)
+            if response.status_code == 200:
+                selectors = response.json()
+                SettingsManager.save_selectors(selectors)
+                return True
+        except:
+              return False
+        
+    @staticmethod
+    def check_app_update()
+        try:
+            response = requests.get(seletorsEndpoint)
+            if response.status_code == 200:
+                selectors = response.json()
+                SettingsManager.save_selectors(selectors)
+                return True
+        except:
+              return False
+    
         
     @staticmethod
     def load_selectors():
@@ -134,3 +161,5 @@ class SettingsManager:
                 json.dump(selectors, f, indent=4)
         except Exception as e:
             print(f"Error saving selectors file: {e}")
+
+
