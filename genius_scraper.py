@@ -272,8 +272,8 @@ class GeniusScraper:
         self.close()
 
 
-if __name__ == "__main__":
-    app = GeniusScraper()
-    lyrics = app.scrape(artist='playboi carti', song_title='different day')
-    print(lyrics)
+# if __name__ == "__main__":
+#     app = GeniusScraper()
+#     lyrics = app.scrape(artist='playboi carti', song_title='different day')
+#     print(lyrics)
 
