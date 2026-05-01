@@ -25,7 +25,7 @@ TEXT_MUTED = "#a1a1aa"    # Zinc 400
 SUCCESS_COLOR = "#10b981" # Emerald 500
 ERROR_COLOR = "#ef4444"   # Red 500
 BORDER_COLOR = "#3f3f46"  # Zinc 700
-CURRENT_VERSION = "0.0.0"
+CURRENT_VERSION = "1.0.0"
 
 class SidebarButton(ctk.CTkButton):
     def __init__(self, master, text, command, **kwargs):
@@ -157,7 +157,7 @@ class LyricsScraperPRO(ctk.CTk):
             pass
         else:
             response = messagebox.askyesnocancel(title="LyricsFusion",
-                                      message="LyrisFusion updates is available \n download now?")
+                                      message="LyricsFusion updates is available \n\n Download now?")
             
             if response:
                 import webbrowser
