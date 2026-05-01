@@ -134,11 +134,21 @@ class LyricsScraperPRO(ctk.CTk):
         self.grid_columnconfigure(1, weight=1)
         self.grid_rowconfigure(0, weight=1)
         
-        self._build_sidebar()
-        self._build_main_container()
-        threading.Thread(target=self._update_handler,daemon=True).start()
-        
+        # DISPLAY THE HOME SCREEN (HOME VIEW)
+        self._build_sidebar() # NAV BUTTONS
+        self._build_main_container() 
         self.show_search_view()
+
+        #CHECK FOR APP UPDATE ON START-UP
+        threading.Thread(target=self._update_handler,daemon=True).start()
+
+
+        # DISABLE THE COPY AND SAVE TO LIBRARY BUTTON ON APPM START-UP AND ENABLE THEM
+        #BACK WHEN SCRAP FINISHED IF SUCCESSFULL
+        self.copy_lyrics.configure(state='disabled')
+        self.save_library.configure(state='disabled')
+
+        
 
 
 
@@ -282,8 +292,10 @@ class LyricsScraperPRO(ctk.CTk):
         toolbar = ctk.CTkFrame(editor_frame, fg_color="transparent", height=60)
         toolbar.grid(row=1, column=0, sticky="ew", padx=20, pady=10)
         
-        ctk.CTkButton(toolbar, text="Copy to Clipboard", fg_color="transparent", border_width=1, border_color=BORDER_COLOR, text_color=TEXT_PRIMARY, hover_color=BG_SURFACE, height=35, command=self._copy_lyrics).pack(side="right", padx=5)
-        ctk.CTkButton(toolbar, text="Save to Library", fg_color=SUCCESS_COLOR, hover_color="#059669", height=35, font=ctk.CTkFont(weight="bold"), command=self._save_lyrics).pack(side="right", padx=5)
+        self.copy_lyrics = ctk.CTkButton(toolbar, text="Copy to Clipboard", fg_color="transparent", border_width=1, border_color=BORDER_COLOR, text_color=TEXT_PRIMARY, hover_color=BG_SURFACE, height=35, command=self._copy_lyrics)
+        self.copy_lyrics.pack(side="right", padx=5)
+        self.save_library = ctk.CTkButton(toolbar, text="Save to Library", fg_color=SUCCESS_COLOR, hover_color="#059669", height=35, font=ctk.CTkFont(weight="bold"), command=self._save_lyrics)
+        self.save_library.pack(side="right", padx=5)
 
     def show_history_view(self):
         self.clear_main_container()
@@ -450,7 +462,7 @@ class LyricsScraperPRO(ctk.CTk):
         self.update_btn.configure(state='disabled')
         update_status = SettingsManager.check_for_updates()
         if update_status:
-            messagebox.showinfo("Updater", "You are running the latest version of LyricsFusion PRO (v1.2.0).")
+            messagebox.showinfo("Updater", "You are running the latest version of LyricsFusion PRO.")
         else:
             messagebox.showinfo("Updater", "Update failed ! check website for other LyricsFusion released version")
         self.update_btn.configure(text='Check for Updates')
@@ -554,6 +566,8 @@ class LyricsScraperPRO(ctk.CTk):
             if result:
                 self.after(0, lambda: self._display_lyrics(result, artist, song))
                 self.after(0, lambda: self._update_status(f"Extraction successful: {artist} - {song}", SUCCESS_COLOR))
+                self.copy_lyrics.configure(state='normal')
+                self.save_library.configure(state='normal')
             else:
                 self.after(0, lambda: self._update_status("Data not found in repository.", ERROR_COLOR))
         except Exception:
