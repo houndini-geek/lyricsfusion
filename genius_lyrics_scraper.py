@@ -5,6 +5,7 @@ from tkinter import messagebox
 import pyperclip
 import os
 import webbrowser
+import requests
 
 # Assuming your backend files remain the same
 from genius_scraper import GeniusScraper
@@ -135,6 +136,16 @@ class LyricsScraperPRO(ctk.CTk):
         self._build_main_container()
         
         self.show_search_view()
+
+
+
+    def check_network_connection(self):
+        try:
+            requests.get('https://google.com',timeout=5)
+            return True
+        except requests.ConnectionError:
+            return False
+    
 
     def _build_sidebar(self):
         self.sidebar = ctk.CTkFrame(self, width=260, fg_color=BG_APP, corner_radius=0)
@@ -500,6 +511,11 @@ class LyricsScraperPRO(ctk.CTk):
         self._show_feedback()
 
     def _scrape_worker(self, artist, song):
+        if not self.check_network_connection:
+            self.after(0, lambda: self._update_status("No network connection!", ERROR_COLOR))
+            return
+        
+
         try:
             if not self.scraper:
                 self.scraper = GeniusScraper()

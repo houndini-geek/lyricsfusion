@@ -17,6 +17,7 @@ from selenium.webdriver.chrome.options import Options
 from selenium.common.exceptions import TimeoutException, NoSuchElementException
 from main_queue import message #type: ignore
 
+from utils import SettingsManager
 
 from stringmatch import Match
 
@@ -33,10 +34,19 @@ class GeniusScraper:
         self._init_driver()
         self.wait = WebDriverWait[Any](self.driver,5)
         self._match = Match()
-    
+        self.selectors = SettingsManager()
+        self.load_selectors()
+        self.isConnected  = self.check_network_connection()
+     
+  
+        
+
     def _queue_handler(self,msg:str):
        
         message.put(msg) #type: ignore
+
+    def load_selectors(self):
+        return self.selectors.load_selectors()
 
 
     def _init_driver(self):
@@ -52,13 +62,13 @@ class GeniusScraper:
         # Set page load strategy to 'eager' to not wait for all subresources (like ads/trackers)
         chrome_options.page_load_strategy = 'eager'
         
+        
         try:
             self.driver = webdriver.Chrome(options=chrome_options)
             # Increase timeout to 30 seconds as Genius can be slow
             self.driver.set_page_load_timeout(30)
         except Exception as e:
             raise GeniusScraperError(f"Failed to initialize Chrome WebDriver: {e}")
-
 
 
     def _matchTitle(self,str1,str2): #type: ignore
@@ -103,10 +113,12 @@ class GeniusScraper:
             self._queue_handler(msg="Searching for extended track results...")
 
             try:
+                showMore = self.load_selectors()['selectors']['showmorebutton']['selector']
+              
                 showMoreButton = self.wait.until(
                     EC.visibility_of_element_located(
                         (By.CLASS_NAME,
-                        'full_width_button')))
+                        showMore)))
                 showMoreButton.click()
                 self._queue_handler(msg="Expanding result list...")
 
@@ -120,15 +132,19 @@ class GeniusScraper:
             # Try to find the result cards
             time.sleep(2)
             try:
+                searchresultpaginated = self.load_selectors()['selectors']['searchresultpaginated']['selector']
+                
                 self._queue_handler(msg="Scanning metadata containers...")
 
-                search_result = self.driver.find_element(By.TAG_NAME, 'search-result-paginated-section')#type: ignore
+                search_result = self.driver.find_element(By.TAG_NAME,  searchresultpaginated)#type: ignore
                 if search_result:
+                    minisongcard = self.load_selectors()['selectors']['minisongcard']['selector']
+
                     self._queue_handler(msg="Track section identified.")
 
                     self._queue_handler(msg="Filtering potential matches...")
                     time.sleep(4)
-                    mini_card_songs = search_result.find_elements(By.TAG_NAME,'mini-song-card')
+                    mini_card_songs = search_result.find_elements(By.TAG_NAME, minisongcard)
                     if  not mini_card_songs:
                         self._queue_handler(msg="No matching track cards detected in this section.")
                         return None
@@ -136,10 +152,13 @@ class GeniusScraper:
 
                     for card in mini_card_songs:
                             try:
+                                minicardtitle = self.load_selectors()['selectors']['minicardtitle']['selector']
+                                minicardsubtitle = self.load_selectors()['selectors']['minicardsubtitle']['selector']
+
                                 self._queue_handler(msg="Verifying track signatures and artist metadata...")
 
-                                title = card.find_element(By.CLASS_NAME,'mini_card-title').text.strip().lower()
-                                subtitle = card.find_element(By.CLASS_NAME,'mini_card-subtitle').text.strip().lower()
+                                title = card.find_element(By.CLASS_NAME,minicardtitle).text.strip().lower()
+                                subtitle = card.find_element(By.CLASS_NAME,minicardsubtitle).text.strip().lower()
                                 self._queue_handler(msg="Calculating similarity scores...")
 
                                 if self._matchTitle(str1=title,str2=song_title) and self._matchArtistName(str1=subtitle,str2=artist): #type: ignore
@@ -167,17 +186,20 @@ class GeniusScraper:
         """Extract lyrics from the current page."""
         try:
             try:
+                datalyricscontainer = self.load_selectors()['selectors']['datalyricscontainer']['selector']
+                datalyricscontainerfallback = self.load_selectors()['selectors']['datalyricscontainerfallback']['selector']
+
                 self._queue_handler(msg="Searching for lyrical data stream...")
 
                 # Modern Genius uses data-lyrics-container attribute
                 containers = self.wait.until(
-                    EC.presence_of_all_elements_located((By.CSS_SELECTOR, "[data-lyrics-container='true']"))
+                    EC.presence_of_all_elements_located((By.CSS_SELECTOR, datalyricscontainer))
                 )
                 self._queue_handler(msg="Lyrics container localized.")
 
             except TimeoutException:
                 self._queue_handler(msg="Primary selector failed. Initiating legacy fallback...")
-                containers = self.driver.find_elements(By.CSS_SELECTOR, "div[class*='Lyrics__Container']") #type: ignore
+                containers = self.driver.find_elements(By.CSS_SELECTOR, datalyricscontainerfallback) #type: ignore
 
             if containers:
                 self._queue_handler(msg=f"Detected {len(containers)} lyrical segments. Beginning extraction...")
@@ -199,6 +221,7 @@ class GeniusScraper:
             raise GeniusScraperError(f"Error extracting lyrics: {e}")
 
     def scrape(self, artist: str, song_title: str) -> dict | None:#type: ignore
+      
         """
         Scrape lyrics from Genius for a given artist and song.
         
@@ -249,8 +272,8 @@ class GeniusScraper:
         self.close()
 
 
-# if __name__ == "__main__":
-#     app = GeniusScraper()
-#     lyrics = app.scrape(artist='playboi carti', song_title='just better')
-#     print(lyrics)
+if __name__ == "__main__":
+    app = GeniusScraper()
+    lyrics = app.scrape(artist='playboi carti', song_title='different day')
+    print(lyrics)
 
