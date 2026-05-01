@@ -150,10 +150,9 @@ class LyricsScraperPRO(ctk.CTk):
             return False
     
     def _update_handler(self):
-        new_version = self.update_manager["APP"]["CURRENT_VERSION"]
+        NEW_VERSION = self.update_manager["APP"]["CURRENT_VERSION"]
         app_url = self.update_manager["APP"]["WEBSITE_URL"]
-        
-        if CURRENT_VERSION == new_version:
+        if NEW_VERSION == CURRENT_VERSION :
             pass
         else:
             response = messagebox.askyesnocancel(title="LyricsFusion",
