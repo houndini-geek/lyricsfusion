@@ -25,7 +25,7 @@ TEXT_MUTED = "#a1a1aa"    # Zinc 400
 SUCCESS_COLOR = "#10b981" # Emerald 500
 ERROR_COLOR = "#ef4444"   # Red 500
 BORDER_COLOR = "#3f3f46"  # Zinc 700
-CURRENT_VERSION = "1.0.0"
+CURRENT_VERSION = "1.1.0"
 
 class SidebarButton(ctk.CTkButton):
     def __init__(self, master, text, command, **kwargs):
@@ -114,6 +114,7 @@ class LyricsScraperPRO(ctk.CTk):
         # Initialize Settings
         self.settings = SettingsManager.load_settings()
         self.update_manager = SettingsManager.check_app_update()
+        self.selectors = SettingsManager.load_selectors()
         
         # Initialize Core with settings
         db_path = self.settings.get("db_path", "lyrics.db")
@@ -148,9 +149,7 @@ class LyricsScraperPRO(ctk.CTk):
         self.copy_lyrics.configure(state='disabled')
         self.save_library.configure(state='disabled')
 
-        
-
-
+    
 
     def check_network_connection(self):
         try:
@@ -158,19 +157,25 @@ class LyricsScraperPRO(ctk.CTk):
             return True
         except requests.ConnectionError:
             return False
+        
+
+
     
     def _update_handler(self):
-        NEW_VERSION = self.update_manager["APP"]["CURRENT_VERSION"]
-        app_url = self.update_manager["APP"]["WEBSITE_URL"]
-        if NEW_VERSION == CURRENT_VERSION :
+        try:
+            NEW_VERSION = self.update_manager["APP"]["CURRENT_VERSION"]
+            app_url = self.update_manager["APP"]["WEBSITE_URL"]
+            if NEW_VERSION == CURRENT_VERSION :
+                pass
+            else:
+                response = messagebox.askyesnocancel(title="LyricsFusion",
+                                        message="LyricsFusion updates is available \n\n Download now?")
+                
+                if response:
+                    import webbrowser
+                    webbrowser.open_new(url=f"{app_url}")
+        except:
             pass
-        else:
-            response = messagebox.askyesnocancel(title="LyricsFusion",
-                                      message="LyricsFusion updates is available \n\n Download now?")
-            
-            if response:
-                import webbrowser
-                webbrowser.open_new(url=f"{app_url}")
 
             
 
@@ -220,9 +225,11 @@ class LyricsScraperPRO(ctk.CTk):
         self.clear_main_container()
         self._reset_sidebar_buttons()
         self.btn_search.configure(fg_color=BG_ELEVATED, text_color=TEXT_PRIMARY)
-       
-        
+
         self.main_container.grid_rowconfigure(3, weight=1)
+
+
+        
 
         # Header
         header_frame = ctk.CTkFrame(self.main_container, fg_color="transparent")
@@ -258,6 +265,9 @@ class LyricsScraperPRO(ctk.CTk):
             fg_color=ACCENT_COLOR, hover_color=ACCENT_HOVER, font=ctk.CTkFont(size=14, weight="bold"),
             command=self._start_scrape
         )
+      
+
+
      
         self.cancel_btn = ctk.CTkButton(
             input_inner, text="Cancel", height=45, width=160, corner_radius=8,
@@ -296,6 +306,13 @@ class LyricsScraperPRO(ctk.CTk):
         self.copy_lyrics.pack(side="right", padx=5)
         self.save_library = ctk.CTkButton(toolbar, text="Save to Library", fg_color=SUCCESS_COLOR, hover_color="#059669", height=35, font=ctk.CTkFont(weight="bold"), command=self._save_lyrics)
         self.save_library.pack(side="right", padx=5)
+
+        if self.check_network_connection():
+            self.scrape_btn.configure(state='normal')
+        else:
+            self.scrape_btn.configure(state='disabled')
+            self.status_label.configure(text='Internet connection Error'
+                                        ,text_color=ERROR_COLOR)
 
     def show_history_view(self):
         self.clear_main_container()
@@ -426,7 +443,9 @@ class LyricsScraperPRO(ctk.CTk):
         self.update_btn = ctk.CTkButton(btn_container, text="Check for Updates", height=40, fg_color=BG_SURFACE, border_width=1, border_color=BORDER_COLOR, command=lambda: threading.Thread(target=self._check_updates,daemon=True).start())
         self.update_btn.pack(side="left", padx=(0, 10))
         ctk.CTkButton(btn_container, text="Wipe Library", height=40, fg_color="transparent", border_width=1, border_color=ERROR_COLOR, text_color=ERROR_COLOR, hover_color="#451a1e", command=self._wipe_library).pack(side="left")
-
+       
+        if not self.check_network_connection():
+            self.update_btn.configure(state='disabled')
         # About Section
         ctk.CTkLabel(scroll_container, text=f"{APP_NAME} v1.2.0\nBuilt for High Performance Lyrics Sync", font=ctk.CTkFont(size=12), text_color=TEXT_MUTED).grid(row=4, column=0, pady=40)
 

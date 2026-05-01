@@ -7,12 +7,13 @@ import requests
 SETTINGS_DIR = Path.home() / ".lyricsfusion"
 SETTINGS_FILE = SETTINGS_DIR / "settings.json"
 SELLECTORS_FILE = SETTINGS_DIR / "selectors.json"
+DB_PATH = SETTINGS_DIR / "lyrics.db"
 
 seletorsEndpoint = 'https://raw.githubusercontent.com/houndini-geek/lyricsfusion/refs/heads/master/selectors.json'
 appVersionEndpoint = 'https://raw.githubusercontent.com/houndini-geek/lyricsfusion/refs/heads/master/current_app.json'
 
 DEFAULT_SETTINGS = {
-    "db_path": "lyrics.db",
+    "db_path": DB_PATH,
     "auto_save": False,
     "high_fidelity": True
 }
@@ -83,12 +84,12 @@ class SettingsManager:
     @staticmethod
     def check_for_updates():
         try:
-            response = requests.get(seletorsEndpoint)
+            response = requests.get(seletorsEndpoint,timeout=5)
             if response.status_code == 200:
                 selectors = response.json()
                 SettingsManager.save_selectors(selectors)
                 return True
-        except:
+        except requests.exceptions.ConnectionError:
               return False
         
     @staticmethod
@@ -160,5 +161,6 @@ class SettingsManager:
                 json.dump(selectors, f, indent=4)
         except Exception as e:
             print(f"Error saving selectors file: {e}")
+
 
 

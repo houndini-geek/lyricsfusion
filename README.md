@@ -78,17 +78,17 @@ The resulting executable will be located in the `dist/` folder.
 
 4. **TODO**
 - [ ] Implement a feature to check for existing lyrics in the database before scraping to avoid duplicates.
-- [ ] Add functionality to check for updates and update the apps automatically.
+- [x] Add functionality to check for updates and update the apps automatically. 
 - [ ] Implement batch scraping for multiple songs.
 - [ ] Add support for other lyric websites.
 - [ ] Enhance error handling and logging.
-- [ ] Create a portable executable for Windows.
+- [x] Create a portable executable for Windows.
 - [ ] Integrate with music libraries (e.g., Spotify, Apple Music) for automatic lyric fetching.
 - [ ] Add user authentication for personalized lyric management.
-- [ ] Implement a search history feature to quickly access previously scraped lyrics.
+- [x] Implement a search history feature to quickly access previously scraped lyrics.
 - [ ] Develop a feature to export lyrics in various formats (TXT, PDF, etc.).
 
 5. **TODO - Tweaks**
-- [ ] Disable the copy and save buttons until a song is successfully scraped to prevent user confusion.
+- [x] Disable the copy and save buttons until a song is successfully scraped to prevent user confusion.
 - [ ] Add a loading spinner or progress bar during the scraping process for better user feedback.
 - [ ] Implement a retry mechanism for failed scrapes to improve reliability.

@@ -7,10 +7,10 @@ import sqlite3
 import os
 from datetime import datetime
 from pathlib import Path
-
+from utils import SettingsManager
 
 class LyricsDatabase:
-    def __init__(self, db_name: str = "lyrics.db"):
+    def __init__(self, db_name: str = SettingsManager.load_settings()['db_path']):
         """Initialize database connection and create tables if needed."""
         self.db_path = Path(db_name)
         self.connection = None
