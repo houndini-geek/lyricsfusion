@@ -1,0 +1,48 @@
+{
+    "selectors":{
+        "showmorebutton":{
+        "selector":"full_width_button",
+        "date":"04-29-2026",
+        "last_modified": "04-29-2026",
+        "date_format": "MM-DD-YY"
+        },
+        "searchresultpaginated":{
+        "selector":"search-result-paginated-section",
+        "date":"04-29-2026",
+        "last_modified": "04-29-2026",
+        "date_format": "MM-DD-YY"
+        },
+        "minisongcard":{
+        "selector":"mini-song-card",
+        "date":"04-29-2026",
+        "last_modified": "04-29-2026",
+        "date_format": "MM-DD-YY"
+        },
+        "minicardtitle":{
+        "selector":"mini_card-title",
+        "date":"04-29-2026",
+        "last_modified": "04-29-2026",
+        "date_format": "MM-DD-YY"
+        },
+        "minicardsubtitle":{
+        "selector":"mini_card-subtitle",
+        "date":"04-29-2026",
+        "last_modified": "04-29-2026",
+        "date_format": "MM-DD-YY"
+        },
+        "datalyricscontainer":{
+        "selector":"[data-lyrics-container='true']",
+        "date":"04-29-2026",
+        "last_modified": "04-29-2026",
+        "date_format": "MM-DD-YY"
+        },
+        "datalyricscontainerfallback":{
+        "selector":"div[class*='Lyrics__Container']",
+        "date":"04-29-2026",
+        "last_modified": "04-29-2026",
+        "date_format": "MM-DD-YY"
+        }
+
+       
+    }
+}

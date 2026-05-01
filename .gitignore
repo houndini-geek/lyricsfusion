@@ -32,8 +32,6 @@ file_version_info.txt
 
 # Local Database
 lyrics.db
-selectors.json
-settings.json
 tt.py
 
 # IDEs
